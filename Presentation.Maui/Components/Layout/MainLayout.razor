@@ -1,19 +1,44 @@
-﻿@inherits LayoutComponentBase
+﻿@using CommunityToolkit.Maui.Storage
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
 
-<button class="btn btn-sm btn-primary">@ChooseDirectoryButtonText</button>
-<div class="container"> 
+
+<div class="container p-3"> 
         
     <div class="container-directoryChooser">
-        <div class="alert-primary">
-            <p>Current directory : @CurrentDirectory </p> 
-        </div>
-    </div>
+        <button class="btn btn-sm btn-primary w-100" @onclick="ChooseDirectory_Click">ChooseDirectoryButtonText</button>
 
+        @if(CurrentDirectory != null )
+        {
+            <div class="alert-primary">
+                <p>Current directory : @CurrentDirectory </p>
+            </div>
+        }
+        
+    </div>
     <div class="container-fileTable">
         <main>
             @Body
         </main>
     </div>
     
-
+    
 </div>
+
+@code {
+    public async void ChooseDirectory_Click()
+    {
+        var result = await FolderPicker.Default.PickAsync();
+        if (result.IsSuccessful)
+        {
+            CurrentDirectory = new(result.Folder.Path);
+            if (!CurrentDirectory.Exists)
+                throw new DirectoryNotFoundException(result.Folder.Path);
+
+            Navigation.NavigateTo("DataSelection");
+
+        }
+
+    }
+
+}
