@@ -1,0 +1,19 @@
+﻿@inherits LayoutComponentBase
+
+<button class="btn btn-sm btn-primary">@ChooseDirectoryButtonText</button>
+<div class="container"> 
+        
+    <div class="container-directoryChooser">
+        <div class="alert-primary">
+            <p>Current directory : @CurrentDirectory </p> 
+        </div>
+    </div>
+
+    <div class="container-fileTable">
+        <main>
+            @Body
+        </main>
+    </div>
+    
+
+</div>
