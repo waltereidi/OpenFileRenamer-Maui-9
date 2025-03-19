@@ -1,35 +1,69 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Presentation.Maui.Interfaces;
 
 namespace Presentation.Maui.Shared
 {
-    public abstract class DataTableModel : ComponentBase
+    public abstract class DataTableModel : ComponentBase , IDataTableModel
     {
         public readonly Guid Id;
         public readonly Type type; 
+        
         public DataTableModel() 
         { 
             Id = new Guid();
         }
-        private void BuildTable<T>()
+
+        public void AddRow()
         {
-
-
+            throw new NotImplementedException();
         }
+
+        public void CleanDataTable()
+        {
+            throw new NotImplementedException();
+        }
+
         public T GetData<T>()
         {
-            throw new Exception();
+            throw new NotImplementedException();
         }
+
+        public string GetId()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetTableColumns()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SelectAllRows(int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SelectRow(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetDataSource()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void OnParametersSet()
         {
 
         }
 
-
+    
 
     }
 }
