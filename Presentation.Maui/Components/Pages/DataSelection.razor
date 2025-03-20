@@ -1,7 +1,10 @@
 ﻿@page "/DataSelection"
-@using Presentation.Maui.Shared
+@using Presentation.Maui.Components.Shared
+@using Presentation.Maui.DTO
 
-<DataTableModel />
+<DataTableModel Type="@(typeof(TablePreviewDTO))"/>
+
+
 @code {
 
     DataTableModel TableComponent; 
