@@ -1,0 +1,22 @@
+﻿@namespace Presentation.Maui.Components.Shared.Inputs
+@using Presentation.Maui.Interfaces
+
+<div class="input-group mb-3">
+    <input type="text"
+           class="@ClassName"
+           placeholder="@PlaceHolder"
+           aria-label="@AriaLabel"
+           aria-describedby="@AriaDescribedBy">
+
+    <div class="input-group-append">
+        <span class="input-group-text" id="basic-addon2">
+            @ChildContent
+        </span>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    
+}
