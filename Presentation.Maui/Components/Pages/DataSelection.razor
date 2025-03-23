@@ -5,15 +5,22 @@
 
 
 
-<FileFilter>
+<FileFilter @bind-Text="@teste" />
 
-</FileFilter>
+
 
 <DataTableModel Type="@(typeof(TablePreviewDTO))"/>
 
+<button @onclick="Check"></button>
+
 
 @code {
+    public string teste;
+
 
     DataTableModel TableComponent; 
-
+    public void Check()
+    {
+        var ee = teste;
+    }
 }

@@ -71,4 +71,8 @@
       <Folder Include="Shared\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\openFileRenamer\ApplicationService\ApplicationService.csproj" />
+    </ItemGroup>
+
 </Project>

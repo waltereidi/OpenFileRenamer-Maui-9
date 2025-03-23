@@ -1,19 +1,45 @@
 ﻿@namespace Presentation.Maui.Components.Shared
 @using Presentation.Maui.Components.Shared.Inputs
+@using Presentation.Maui.DTO
 
 <div>
-    <AlsoNumberedTextInput 
-        ClassName="form-control"
-        PlaceHolder="Filter Files"
-        onkeyup=""
-    >
-        <i class="fa-solid fa-magnifying-glass"></i>
-    </AlsoNumberedTextInput>
+@* filter input  *@
+    <div class="input-group mb-3">
+        <input type="text"
+               class="form-control"
+               placeholder="Search files"
+               @bind:get="InputFilterText"
+               @bind:set="SetInputFilterText">
 
+        <div class="input-group-append">
+            <span class="input-group-text">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+        </div>
+    </div>
+
+@* filter input  end*@
+    <div>
+        <select class="form-select form-select-lg mb-3" 
+            aria-label=".form-select-lg example" >
+            <option value="Contains" selected>Contains</option>
+            <option value="Size"> Size </option>
+            <option value="Extension">Extension</option>
+        </select>
+    </div>
 </div>
 
-
-
 @code {
+    [Parameter]
+    public string Text { get; set; }
+
+    private string InputFilterText;
+
+    private void SetInputFilterText(string value)
+    {
+        InputFilterText = value; 
+        Text = value;
+
+    }
 
 }
