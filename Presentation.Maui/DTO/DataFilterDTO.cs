@@ -8,7 +8,7 @@ namespace Presentation.Maui.DTO
 {
     public class DataFilterDTO
     {
-        DirectoryInfo Directory { get; set; }
-        string Text { get; set; }
+        public DirectoryInfo Directory { get; set; }
+        public string Text { get; set; }
     }
 }

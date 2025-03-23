@@ -4,23 +4,22 @@
 @using Presentation.Maui.DTO
 
 
-
-<FileFilter @bind-Text="@teste" />
-
+<FileFilter @bind-FilterChangedCallBack="FilterChanged" />
 
 
 <DataTableModel Type="@(typeof(TablePreviewDTO))"/>
 
 <button @onclick="Check"></button>
 
+<h1>@texto </h1>
 
 @code {
-    public string teste;
+    private static string texto { get; set; } = ""; 
 
-
-    DataTableModel TableComponent; 
+    private Action<DataFilterDTO> FilterChanged = (c) => texto = c.Text;
+    //private void UpdateYear() => year = Random.Shared.Next(1950, 2021);
     public void Check()
     {
-        var ee = teste;
+        
     }
 }

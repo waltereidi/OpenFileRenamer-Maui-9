@@ -8,8 +8,7 @@
         <input type="text"
                class="form-control"
                placeholder="Search files"
-               @bind:get="InputFilterText"
-               @bind:set="SetInputFilterText">
+               @onchange="testc" />
 
         <div class="input-group-append">
             <span class="input-group-text">
@@ -30,15 +29,16 @@
 </div>
 
 @code {
+
     [Parameter]
-    public string Text { get; set; }
+    public Action<DataFilterDTO> FilterChangedCallBack { get; set; }
 
-    private string InputFilterText;
-
-    private void SetInputFilterText(string value)
+    public async void testc()
     {
-        InputFilterText = value; 
-        Text = value;
+        var e = new DataFilterDTO();
+        e.Text = "teste";
+        Console.WriteLine("sdsd");
+        FilterChangedCallBack.Invoke(e);
 
     }
 
