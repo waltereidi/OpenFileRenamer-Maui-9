@@ -9,11 +9,11 @@ namespace Presentation.Maui.DTO
 {
     public class TablePreviewDTO
     {
-        [DataTable("File Name")]
+        [DataTableColumnName("File Name")]
         public string FileName { get; set; }
-        [DataTable("Size")]
+        [DataTableColumnName("Size")]
         public string FileSize { get; set; }
-        [DataTable(Enum.DataTableCustomColumn.HiddenColumn )]
+        [DataTableHiddenColumn]
         public string FileIdentity { get; set; }
         
     }
