@@ -1,23 +1,42 @@
-﻿@page "/DataSelection"
+﻿@page "/DataSelection/{directoryInfo}"
 @namespace Presentation.Maui.Components.Pages
 @using Presentation.Maui.Components.Shared
 @using Presentation.Maui.DTO
 
 
-<FileFilter @bind-FilterChangedCallBack="FilterChanged" />
+<FileFilter />
 
 
-<DataTableModel Type="@(typeof(TablePreviewDTO))"/>
+<DataTableModel Type="@(typeof(TablePreviewDTO))" @bind-_dataSource="_dataSource" />
 
 <button @onclick="Check"></button>
 
-<h1>@texto </h1>
 
 @code {
-    private static string texto { get; set; } = ""; 
+    [Parameter]
+    public string directoryInfo { get; set; }
 
-    private Action<DataFilterDTO> FilterChanged = (c) => texto = c.Text;
-    //private void UpdateYear() => year = Random.Shared.Next(1950, 2021);
+    private List<object> _dataSource;
+    protected override async Task OnParametersSetAsync()
+    {
+        DirectoryInfo dir = new(directoryInfo);
+
+        var files = dir.GetFiles();
+        if (files.Any())
+        {
+
+            var ds = files.Select(s => new TablePreviewDTO()
+            {
+                FileIdentity = s.FullName,
+                FileName = s.Name,
+                FileSize = s.Length,
+            }
+            ).ToList();
+            ds.ForEach(f => _dataSource.Add(f));
+        }
+        
+    }
+
     public void Check()
     {
         

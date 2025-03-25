@@ -2,7 +2,6 @@
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
 
-
 <div class="container p-3"> 
         
     <div class="container-directoryChooser">
@@ -35,7 +34,7 @@
             if (!CurrentDirectory.Exists)
                 throw new DirectoryNotFoundException(result.Folder.Path);
 
-            Navigation.NavigateTo("DataSelection");
+            Navigation.NavigateTo($"/DataSelection/sdsd");
 
         }
 

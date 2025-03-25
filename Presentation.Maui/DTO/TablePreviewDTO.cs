@@ -12,7 +12,7 @@ namespace Presentation.Maui.DTO
         [DataTableColumnName("File Name")]
         public string FileName { get; set; }
         [DataTableColumnName("Size")]
-        public string FileSize { get; set; }
+        public long FileSize { get; set; }
         [DataTableHiddenColumn]
         public string FileIdentity { get; set; }
         
