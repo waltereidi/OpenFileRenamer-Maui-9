@@ -1,4 +1,5 @@
 ﻿@using CommunityToolkit.Maui.Storage
+@using Presentation.Maui.ValueObjects
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
 
@@ -34,7 +35,7 @@
             if (!CurrentDirectory.Exists)
                 throw new DirectoryNotFoundException(result.Folder.Path);
 
-            Navigation.NavigateTo($"/DataSelection/sdsd");
+            Navigation.NavigateTo($"/DataSelection/{(string)(DirectoryUri)result.Folder.Path}");
 
         }
 

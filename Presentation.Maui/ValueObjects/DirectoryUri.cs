@@ -1,4 +1,5 @@
-﻿using Java.Net;
+﻿using static System.Web.HttpUtility;
+using System.Text;
 using System.Text.Encodings.Web;
 
 namespace Presentation.Maui.ValueObjects
@@ -6,38 +7,30 @@ namespace Presentation.Maui.ValueObjects
     public class DirectoryUri
     {
         private readonly DirectoryInfo _dir;
+        public string Value { get; private set; }
         private DirectoryUri(DirectoryInfo value)
         {
             _dir = value;
             EnsureIsValid();
+            SetUriEncodedPath();
         }
-        private DirectoryUri(string value )
-        {
-            
-            //_dir = new DirectoryInfo(urlDecoder.Decode(value));
-
-            EnsureIsValid();
-        }
+        
         private void EnsureIsValid()
         {
             if (!_dir.Exists)
                 throw new DirectoryNotFoundException(); 
 
         }
-        public string GetUriEncodedPath()
-        {
-            return UrlEncoder.Default.Encode(_dir.FullName);
-        }
+        public static string FromEncodedUri(string encodedUri)
+            => UrlDecode(encodedUri, Encoding.UTF8);
+        public void SetUriEncodedPath()
+            => Value = UrlEncoder.Default.Encode(_dir.FullName);
 
         public static implicit operator string(DirectoryUri uri)
-        {
-            return uri.GetUriEncodedPath();
-        }
+            => uri.Value;
 
         public static explicit operator DirectoryUri(string uri)
-        {
-            return new DirectoryUri(uri);
-        }
+            => new DirectoryUri(new (uri));
 
     }
 }

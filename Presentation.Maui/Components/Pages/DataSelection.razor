@@ -1,7 +1,8 @@
-﻿@page "/DataSelection/{directoryInfo}"
-@namespace Presentation.Maui.Components.Pages
+﻿@namespace Presentation.Maui.Components.Pages
+@page "/DataSelection/{directoryInfo}"
 @using Presentation.Maui.Components.Shared
 @using Presentation.Maui.DTO
+@using Presentation.Maui.ValueObjects
 
 
 <FileFilter />
@@ -14,12 +15,12 @@
 
 @code {
     [Parameter]
-    public string directoryInfo { get; set; }
+    public string DirectoryInfo { get; set; }
 
     private List<object> _dataSource;
     protected override async Task OnParametersSetAsync()
     {
-        DirectoryInfo dir = new(directoryInfo);
+        DirectoryInfo dir = new(DirectoryUri.FromEncodedUri(DirectoryInfo));
 
         var files = dir.GetFiles();
         if (files.Any())
