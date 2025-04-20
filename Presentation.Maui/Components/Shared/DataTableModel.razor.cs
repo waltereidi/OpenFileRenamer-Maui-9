@@ -12,12 +12,12 @@ namespace Presentation.Maui.Components.Shared
         private List<ColumnDef> _columns { get; set; }
         
         [Parameter]
-        public List<object> _dataSource { get; set; }        
+        public List<object> DataSource { get; set; }        
         [Parameter]
-        public Type _type { get; set; }
+        public Type Type { get; set; }
 
         private List<MemberInfo> GetPropertyMember()
-            => _type.GetMembers()
+            => Type.GetMembers()
                 .Where(x => x.MemberType == MemberTypes.Property)
                 .ToList();
 
@@ -34,15 +34,15 @@ namespace Presentation.Maui.Components.Shared
         
         public void RenderTable()
         {
-            if (_type == null)
+            if (Type == null)
                 throw new ArgumentNullException(nameof(Type));
 
             _columns = GetColumnDefinition();
 
-            if (_dataSource != null && _dataSource.Any() && _dataSource.First().GetType().Name != nameof(_type))
-                throw new InvalidDataException(nameof(_dataSource));
+            if (DataSource != null && DataSource.Any() && DataSource.First().GetType().Name != nameof(Type))
+                throw new InvalidDataException(nameof(DataSource));
 
-            if (_dataSource != null && _dataSource.Any())
+            if (DataSource != null && DataSource.Any())
                 RenderData();
 
         }

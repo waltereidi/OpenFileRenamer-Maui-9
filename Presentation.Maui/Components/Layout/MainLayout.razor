@@ -35,8 +35,12 @@
             if (!CurrentDirectory.Exists)
                 throw new DirectoryNotFoundException(result.Folder.Path);
 
-            Navigation.NavigateTo($"/DataSelection/{(string)(DirectoryUri)result.Folder.Path}");
+            var di = new DirectoryInfo(result.Folder.Path);
 
+            if(di.Exists && di.GetFiles().Any())
+                Navigation.NavigateTo($"/DataSelection/{(string)(DirectoryUri)result.Folder.Path}");
+            else 
+                Navigation.NavigateTo($"/");
         }
 
     }

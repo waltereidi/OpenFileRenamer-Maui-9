@@ -1,23 +1,19 @@
 ﻿@namespace Presentation.Maui.Components.Pages
-@page "/DataSelection/{directoryInfo}"
+@inject NavigationManager Navigation
 @using Presentation.Maui.Components.Shared
 @using Presentation.Maui.DTO
 @using Presentation.Maui.ValueObjects
-
+@page "/DataSelection/{directoryInfo}"
 
 <FileFilter />
 
+<DataTableModel @bind-Type="typeof(TablePreviewDTO)" @bind-DataSource="_dataSource" />
 
-<DataTableModel Type="@(typeof(TablePreviewDTO))" @bind-_dataSource="_dataSource" />
-
-<button @onclick="Check"></button>
-
-
-@code {
+@code{
     [Parameter]
     public string DirectoryInfo { get; set; }
 
-    private List<object> _dataSource;
+    private List<object> _dataSource = new();
     protected override async Task OnParametersSetAsync()
     {
         DirectoryInfo dir = new(DirectoryUri.FromEncodedUri(DirectoryInfo));
@@ -25,21 +21,14 @@
         var files = dir.GetFiles();
         if (files.Any())
         {
-
-            var ds = files.Select(s => new TablePreviewDTO()
-            {
-                FileIdentity = s.FullName,
-                FileName = s.Name,
-                FileSize = s.Length,
-            }
-            ).ToList();
-            ds.ForEach(f => _dataSource.Add(f));
+            files.Select(s => new TablePreviewDTO()
+                {
+                    FileIdentity = s.FullName,
+                    FileName = s.Name,
+                    FileSize = s.Length
+                }).ToList().ForEach(f => _dataSource.Add(f));
         }
-        
+
     }
 
-    public void Check()
-    {
-        
-    }
 }
