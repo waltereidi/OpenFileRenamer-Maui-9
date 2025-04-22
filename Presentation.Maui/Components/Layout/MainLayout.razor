@@ -1,4 +1,5 @@
 ﻿@using CommunityToolkit.Maui.Storage
+@using Presentation.Maui.Service
 @using Presentation.Maui.ValueObjects
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
@@ -31,17 +32,10 @@
         var result = await FolderPicker.Default.PickAsync();
         if (result.IsSuccessful)
         {
-            CurrentDirectory = new(result.Folder.Path);
-            if (!CurrentDirectory.Exists)
-                throw new DirectoryNotFoundException(result.Folder.Path);
-
-            var di = new DirectoryInfo(result.Folder.Path);
-
-            if(di.Exists && di.GetFiles().Any())
-                Navigation.NavigateTo($"/DataSelection/{(string)(DirectoryUri)result.Folder.Path}");
-            else 
-                Navigation.NavigateTo($"/");
+                DirectoryManagerService.SetDirectory(result.Folder.Path);
+                Navigation.NavigateTo($"/DataSelection");
         }
+
 
     }
 
