@@ -1,22 +1,27 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Presentation.Maui.Attributes;
+using Presentation.Maui.DTO;
 using Presentation.Maui.Service;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks.Sources;
-
 
 namespace Presentation.Maui.Components.Shared
 {
-    public partial class DataTableModel : ComponentBase
+    public partial class DataTableModelSelection : ComponentBase
     {
         private DirectoryInfo _dir { get => DirectoryManagerService._dir; }
-        public DataTableModel()
+        private IEnumerable<TableSelectionDTO> _files { get => GetDirectoryFiles(); }
+        public DataTableModelSelection()
         {
-            if (!_dir.Exists)
+            if (!_dir.Exists || !_dir.GetFiles().Any())
                 Navigation.NavigateTo($"/");
-        }
 
+        }
+        private IEnumerable<TableSelectionDTO> GetDirectoryFiles()
+        => _dir.GetFiles().Select(s=>new TableSelectionDTO()
+            {
+                FileIdentity = s.FullName,
+                FileName = s.Name,
+                FileSize = s.Length
+            });
+        
 
         //    private record ColumnDef(int index , MemberInfo originator , bool visible , string columnName , Guid ColumnId);
         //    private readonly Guid Id;

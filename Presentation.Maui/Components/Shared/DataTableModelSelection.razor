@@ -1,0 +1,29 @@
+@using Presentation.Maui.DTO
+@using Presentation.Maui.Interfaces
+@inject NavigationManager Navigation
+
+
+<table class="table table-dark table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Name</th><th>Size</th><th>Checked</th>
+        </tr>
+    </thead>
+    @foreach( TableSelectionDTO file in _files )
+    {
+        <tr >
+            <td>@file.FileName</td>
+            <td>@file.FileSize</td>
+            <td id="@file.FileIdentity"><input  type="checkbox" value="checked"/></td>
+        </tr>
+    }
+    
+
+</table>
+
+@code 
+{
+
+
+
+}
