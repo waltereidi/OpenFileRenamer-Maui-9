@@ -8,11 +8,13 @@
         <input type="text"
                class="form-control"
                placeholder="Search files"
-               @onchange="testc" />
+               bind="@FilterDTO.Text"
+                @onchange="FormChanged"
+                />
 
         <div class="input-group-append">
-            <span class="input-group-text">
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <span  class="input-group-text">
+                search
             </span>
         </div>
     </div>
@@ -20,26 +22,27 @@
 @* filter input  end*@
     <div>
         <select class="form-select form-select-lg mb-3" 
-            aria-label=".form-select-lg example" >
+            aria-label=".form-select-lg example"
+                @onchange="FormChanged"
+                bind="@FilterDTO.FilterOption">
             <option value="Contains" selected>Contains</option>
             <option value="Size"> Size </option>
             <option value="Extension">Extension</option>
         </select>
     </div>
 </div>
-
 @code {
 
     [Parameter]
-    public Action<DataFilterDTO> FilterChangedCallBack { get; set; }
+    public EventCallback<DataFilterDTO> OnChangeCallBack { get; set; }
+    private DataFilterDTO FilterDTO = new DataFilterDTO();
 
-    public async void testc()
+    private void FormChanged(ChangeEventArgs c)
     {
-        var e = new DataFilterDTO();
-        e.Text = "teste";
-        Console.WriteLine("sdsd");
-        FilterChangedCallBack.Invoke(e);
 
+
+        OnChangeCallBack.InvokeAsync(FilterDTO);
     }
+
 
 }

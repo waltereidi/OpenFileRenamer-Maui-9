@@ -5,9 +5,12 @@
 @using Presentation.Maui.ValueObjects
 @page "/DataSelection"
 
-<FileFilter />
+<FileFilter OnChangeCallBack="DataFilterChanged" />
 <DataTableModelSelection />
 @code{
-
+    private void DataFilterChanged(DataFilterDTO e)
+    {
+        Console.WriteLine($"Blaze a new trail with Blazor! {e.ToString()}");
+    }
 
 }

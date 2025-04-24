@@ -8,7 +8,7 @@ namespace Presentation.Maui.DTO
 {
     public class DataFilterDTO
     {
-        public DirectoryInfo Directory { get; set; }
         public string Text { get; set; }
+        public string FilterOption { get; set; } = "Contains";
     }
 }
