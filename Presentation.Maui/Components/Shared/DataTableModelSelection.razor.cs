@@ -6,6 +6,10 @@ namespace Presentation.Maui.Components.Shared
 {
     public partial class DataTableModelSelection : ComponentBase
     {
+        [Parameter]
+        public DataFilterDTO DataFilter { get; set; }
+
+
         private DirectoryInfo _dir { get => DirectoryManagerService._dir; }
         private IEnumerable<TableSelectionDTO> _files { get => GetDirectoryFiles(); }
         public DataTableModelSelection()
@@ -15,13 +19,23 @@ namespace Presentation.Maui.Components.Shared
 
         }
         private IEnumerable<TableSelectionDTO> GetDirectoryFiles()
-        => _dir.GetFiles().Select(s=>new TableSelectionDTO()
+        => _dir.GetFiles()
+            .Where(x => Predicate(x))
+            .Select(s=>new TableSelectionDTO()
             {
                 FileIdentity = s.FullName,
                 FileName = s.Name,
                 FileSize = s.Length
             });
-        
+        private bool Predicate(FileInfo dto )
+        {
+            if (DataFilter == null || String.IsNullOrEmpty(DataFilter.Text))
+                return true;
+            else
+            {
+                
+            }
+        }
 
         //    private record ColumnDef(int index , MemberInfo originator , bool visible , string columnName , Guid ColumnId);
         //    private readonly Guid Id;

@@ -6,11 +6,11 @@
 @page "/DataSelection"
 
 <FileFilter OnChangeCallBack="DataFilterChanged" />
-<DataTableModelSelection />
+<DataTableModelSelection DataFilter="DataFilter"/>
 @code{
+    private DataFilterDTO DataFilter { get; set; } = new DataFilterDTO();
+
     private void DataFilterChanged(DataFilterDTO e)
-    {
-        Console.WriteLine($"Blaze a new trail with Blazor! {e.ToString()}");
-    }
+        => DataFilter = e;
 
 }
