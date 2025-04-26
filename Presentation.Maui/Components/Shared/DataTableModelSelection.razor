@@ -7,15 +7,20 @@
     <thead class="thead-dark">
         <tr>
             <th>Name</th><th>Size</th><th>Checked</th>
-
         </tr>
     </thead>
     @foreach( TableSelectionDTO file in _files )
     {
         <tr >
-            <td>@file.FileName</td>
-            <td>@file.FileSize</td>
-            <td id="@file.FileIdentity"><input  type="checkbox" value="checked"/></td>
+            <td class="table-light">@file.FileName</td>
+            <td class="table-light">@file.FileSize</td>
+            
+            <td class="table-light">
+                <input id="@file.FileIdentity" 
+                    type="checkbox" 
+                    checked="@file.IsChecked"
+                       @onchange="(e)=>CheckBoxChanged(e , file.FileIdentity)" />
+            </td>
         </tr>
     }
     

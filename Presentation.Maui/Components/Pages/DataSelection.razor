@@ -8,7 +8,7 @@
 <FileFilter OnChangeCallBack="DataFilterChanged" />
 <DataTableModelSelection DataFilter="DataFilter"/>
 @code{
-    private DataFilterDTO DataFilter { get; set; } = new DataFilterDTO();
+    private DataFilterDTO DataFilter { get; set; } = new DataFilterDTO(null , null );
 
     private void DataFilterChanged(DataFilterDTO e)
         => DataFilter = e;

@@ -33,16 +33,16 @@
 
     [Parameter]
     public EventCallback<DataFilterDTO> OnChangeCallBack { get; set; }
-    private string FilterOption { get; set; };
+    private string FilterOption { get; set; }
     private string FilterText { get; set; }
     private void FilterTextChanged(ChangeEventArgs e)
     {
-        FilterText = e.Value;
+        FilterText = e.Value.ToString();
         FormChanged();
     }
     private void FilterOptionChanged(ChangeEventArgs e)
     {
-        FilterOption = e.Value;
+        FilterOption = e.Value.ToString();
         FormChanged();
     }
 

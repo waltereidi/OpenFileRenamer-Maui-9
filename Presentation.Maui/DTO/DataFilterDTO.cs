@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Microsoft.AspNetCore.Components;
 
 namespace Presentation.Maui.DTO
 {
@@ -26,6 +23,7 @@ namespace Presentation.Maui.DTO
                 ? 0
                 : SetDataFilterOption(filterOption);
         }
+
         private DataFilterOption SetDataFilterOption(string option)
         {
             switch (option)

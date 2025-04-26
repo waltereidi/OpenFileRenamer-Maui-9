@@ -15,6 +15,8 @@ namespace Presentation.Maui.DTO
         public long FileSize { get; set; }
         [DataTableHiddenColumn]
         public string FileIdentity { get; set; }
-        
+        [DataTableColumnName("Checked")]
+        public bool IsChecked { get; set; } = true;
+
     }
 }

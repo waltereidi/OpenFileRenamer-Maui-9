@@ -12,6 +12,7 @@ namespace Presentation.Maui.Service
         public static DirectoryInfo _dir { get; private set ; }
         public static void SetDirectory(string dir)
             => _dir = new DirectoryInfo(dir);
+        public static bool IsValid() => _dir.Exists && _dir.GetFiles().Any();
 
     }
 }
