@@ -16,7 +16,7 @@
             <td class="table-light">@file.FileSize</td>
             
             <td class="table-light">
-                <input id="@file.FileIdentity" 
+                <input id="@file.FileIdentity.Id" 
                     type="checkbox" 
                     checked="@file.IsChecked"
                        @onchange="(e)=>CheckBoxChanged(e , file.FileIdentity)" />
@@ -26,10 +26,3 @@
     
 
 </table>
-
-@code 
-{
-
-
-
-}

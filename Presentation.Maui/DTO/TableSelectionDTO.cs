@@ -1,4 +1,5 @@
-﻿using Presentation.Maui.Attributes;
+﻿using FileManager.DAO;
+using Presentation.Maui.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,9 @@ namespace Presentation.Maui.DTO
 {
     public class TableSelectionDTO
     {
-        [DataTableColumnName("File Name")]
         public string FileName { get; set; }
-        [DataTableColumnName("Size")]
         public long FileSize { get; set; }
-        [DataTableHiddenColumn]
-        public string FileIdentity { get; set; }
-        [DataTableColumnName("Checked")]
+        public FileIdentity FileIdentity { get; set; }
         public bool IsChecked { get; set; } = true;
 
     }

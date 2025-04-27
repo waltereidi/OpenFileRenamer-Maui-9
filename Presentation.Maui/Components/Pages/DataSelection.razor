@@ -6,11 +6,25 @@
 @page "/DataSelection"
 
 <FileFilter OnChangeCallBack="DataFilterChanged" />
-<DataTableModelSelection DataFilter="DataFilter"/>
+
+<DataTableModelSelection DataFilter="DataFilter" OnTableDataChangeCallBack="DataTableChanged" />
+
+<button 
+    class="btn btn-sm btn-primary"
+    @onclick="PreviewSelectedFiles">Preview Selected Files
+</button>
+
 @code{
     private DataFilterDTO DataFilter { get; set; } = new DataFilterDTO(null , null );
+    private List<TableSelectionDTO> DataTableFiles { get; set; } = new List<TableSelectionDTO>();
+    private void DataTableChanged(List<TableSelectionDTO> e)
+        => DataTableFiles = e;
 
     private void DataFilterChanged(DataFilterDTO e)
         => DataFilter = e;
 
+    private void PreviewSelectedFiles(MouseEventArgs args)
+    {
+        throw new NotImplementedException();
+    }
 }
