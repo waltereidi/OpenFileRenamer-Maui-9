@@ -1,13 +1,15 @@
 ﻿@namespace Presentation.Maui.Components.Pages
 @inject NavigationManager Navigation
+@using Presentation.Maui.ComponentModel
 @using Presentation.Maui.Components.Shared
 @using Presentation.Maui.DTO
+@using Presentation.Maui.Service
 @using Presentation.Maui.ValueObjects
 @page "/DataSelection"
 
 <FileFilter OnChangeCallBack="DataFilterChanged" />
 
-<DataTableModelSelection DataFilter="DataFilter" OnTableDataChangeCallBack="DataTableChanged" />
+<DataTableModelSelection DataTableFiles="DataTableDTO" />
 
 <button 
     class="btn btn-sm btn-primary"
@@ -15,16 +17,15 @@
 </button>
 
 @code{
-    private DataFilterDTO DataFilter { get; set; } = new DataFilterDTO(null , null );
-    private List<TableSelectionDTO> DataTableFiles { get; set; } = new List<TableSelectionDTO>();
-    private void DataTableChanged(List<TableSelectionDTO> e)
-        => DataTableFiles = e;
+    private DataTableModel<TableSelectionDTO> DataTableDTO { get; set; }
+
+
 
     private void DataFilterChanged(DataFilterDTO e)
-        => DataFilter = e;
+        => DataTableDTO =new( DirectoryManagerService._dir, e );
 
     private void PreviewSelectedFiles(MouseEventArgs args)
     {
-        throw new NotImplementedException();
+        var e = DataTableDTO.TableRows.Where(x => x.IsChecked);
     }
 }

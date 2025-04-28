@@ -9,7 +9,7 @@
             <th>Name</th><th>Size</th><th>Checked</th>
         </tr>
     </thead>
-    @foreach( TableSelectionDTO file in _files )
+    @foreach (TableSelectionDTO file in DataTableFiles.TableRows)
     {
         <tr >
             <td class="table-light">@file.FileName</td>
