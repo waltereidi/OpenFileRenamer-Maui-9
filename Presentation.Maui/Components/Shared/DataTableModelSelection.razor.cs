@@ -1,9 +1,6 @@
 ﻿using FileManager.DAO;
-using Javax.Sql;
 using Microsoft.AspNetCore.Components;
-using Presentation.Maui.ComponentModel;
 using Presentation.Maui.DTO;
-using Presentation.Maui.Service;
 
 namespace Presentation.Maui.Components.Shared
 {
@@ -14,7 +11,7 @@ namespace Presentation.Maui.Components.Shared
         public TableSelectionDTO DataTableFiles { get; set; }
 
         private void CheckBoxChanged(ChangeEventArgs e , FileIdentity fi )
-            => DataTableFiles.CheckBoxChanged(fi, e.Value?.ToString() == "true" ? true : false);
+            => DataTableFiles.CheckBoxChanged(fi, (bool)e.Value);
         //protected override void OnParametersSet()
         //{
         //    List<FileIdentity> checkedFiles = new List<FileIdentity>();

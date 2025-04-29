@@ -1,6 +1,5 @@
 ﻿@namespace Presentation.Maui.Components.Pages
 @inject NavigationManager Navigation
-@using Presentation.Maui.ComponentModel
 @using Presentation.Maui.Components.Shared
 @using Presentation.Maui.DTO
 @using Presentation.Maui.Service
@@ -9,7 +8,7 @@
 
 <FileFilter OnChangeCallBack="DataFilterChanged" />
 
-<DataTableModelSelection DataTableFiles="DataTableDTO" />
+<DataTableModelSelection DataTableFiles="TableSelection" />
 
 <button 
     class="btn btn-sm btn-primary"
@@ -17,15 +16,19 @@
 </button>
 
 @code{
-    private DataTableModel<TableSelectionDTO> DataTableDTO { get; set; }
+    private TableSelectionDTO TableSelection { get; set; }
+        = new TableSelectionDTO(DirectoryManagerService._dir, null );
 
 
 
     private void DataFilterChanged(DataFilterDTO e)
-        => DataTableDTO =new( DirectoryManagerService._dir, e );
+    { 
+        TableSelection.SetDataFilter(e);
+        TableSelection.SetDir(DirectoryManagerService._dir);
+    }
 
     private void PreviewSelectedFiles(MouseEventArgs args)
     {
-        var e = DataTableDTO.TableRows.Where(x => x.IsChecked);
+        var e = TableSelection.Rows.Where(x => x.IsChecked);
     }
 }

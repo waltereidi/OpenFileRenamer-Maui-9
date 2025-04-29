@@ -17,23 +17,44 @@ namespace Presentation.Maui.DTO
             public FileIdentity FileIdentity { get; set; }
             public bool IsChecked { get; set; } = true;
         }
-        public DirectoryInfo Dir;
+        public DirectoryInfo Dir { get; private set; }
 
-        public DataFilterDTO DataFilter;
+        public DataFilterDTO DataFilter { get; private set; }
         public List<TableSelectionDTO.TableRows> Rows { get; set; }
+        public void SetDataFilter(DataFilterDTO d)
+        {
+            DataFilter = d;
+            GetTableFiles();
+        }
+        public void SetDir(DirectoryInfo d )
+        {
+            if (d.Exists && d.FullName != Dir.FullName && d.GetFiles().Any())
+            {
+                Dir = d;
+                GetTableFiles();
+            }
 
+        }
         public TableSelectionDTO(DirectoryInfo dir, DataFilterDTO filter)
         {
             Dir = dir;
             DataFilter = filter;
+            GetTableFiles();
         }
         public void CheckBoxChanged(FileIdentity fi , bool value)
             => Rows.ForEach(x => {
                 if (x.FileIdentity.Equals(fi.Id))
                     x.IsChecked = value;
             });
-        private IEnumerable<TableSelectionDTO.TableRows> GetTableFiles()
-            => Dir.GetFiles()
+        
+        private void GetTableFiles()
+        {
+            List<FileIdentity> checkedFiles = (this.Rows != null && this.Rows.Any())
+                ? this.Rows.Where(x => x.IsChecked)
+                    .Select(s => s.FileIdentity).ToList() 
+                    : new();
+
+            Rows = Dir.GetFiles()
                 .Where(x => Predicate(x))
                 .Select(s => new TableSelectionDTO.TableRows()
                 {
@@ -41,7 +62,13 @@ namespace Presentation.Maui.DTO
                     FileName = s.Name,
                     FileSize = s.Length,
                     IsChecked = true
-                });
+                }).ToList();
+
+            Rows.ForEach(f => f.IsChecked = checkedFiles.Any(x => x.Id.Equals(f.FileIdentity.Id) == false)
+                ? false
+                : true
+            );
+        }
 
         private bool Predicate(FileInfo dto)
         {
