@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Maui.Storage;
+using Presentation.Maui.DTO;
 
 namespace Presentation.Maui.Service
 {
     internal static class DirectoryManagerService
     {
         public static DirectoryInfo _dir { get; private set ; }
-        public static void SetDirectory(string dir)
-            => _dir = new DirectoryInfo(dir);
-        public static bool IsValid() => _dir.Exists && _dir.GetFiles().Any();
+        public static TablePreviewDTO _files { get; private set; }
 
+        public static async Task SetDirectory()
+        {
+            var result = await FolderPicker.Default.PickAsync();
+            if (result.IsSuccessful)
+                _dir = new(result.Folder.Path);
+        }
+        public static bool IsValid() 
+            =>_dir != null && _dir.Exists && _dir.GetFiles().Any();
+        
     }
 }

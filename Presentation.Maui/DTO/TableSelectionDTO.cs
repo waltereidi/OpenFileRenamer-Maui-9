@@ -1,14 +1,9 @@
 ﻿using FileManager.DAO;
-using Presentation.Maui.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Presentation.Maui.Interfaces;
 
 namespace Presentation.Maui.DTO
 {
-    public class TableSelectionDTO
+    public class TableSelectionDTO : DataHandler , ITableSelection
     {
         public class TableRows
         {
@@ -17,28 +12,24 @@ namespace Presentation.Maui.DTO
             public FileIdentity FileIdentity { get; set; }
             public bool IsChecked { get; set; } = true;
         }
-        public DirectoryInfo Dir { get; private set; }
+        public TableSelectionDTO(DirectoryInfo dir, DataFilterDTO filter)
+            :base(dir)
+        {
+            Rows = new();
+            DataFilter = filter;
+            GetTableFiles();
+        }
 
-        public DataFilterDTO DataFilter { get; private set; }
-        public List<TableSelectionDTO.TableRows> Rows { get; set; }
+        private DataFilterDTO DataFilter { get; set; }
+        private List<TableSelectionDTO.TableRows> Rows { get;set; }
+        public List<TableSelectionDTO.TableRows> GetRows()
+            => Rows;
+        public IEnumerable<TableSelectionDTO.TableRows> GetCheckedRows()
+            => Rows.Where(x => x.IsChecked);
+
         public void SetDataFilter(DataFilterDTO d)
         {
             DataFilter = d;
-            GetTableFiles();
-        }
-        public void SetDir(DirectoryInfo d )
-        {
-            if (d.Exists && d.FullName != Dir.FullName && d.GetFiles().Any())
-            {
-                Dir = d;
-                GetTableFiles();
-            }
-
-        }
-        public TableSelectionDTO(DirectoryInfo dir, DataFilterDTO filter)
-        {
-            Dir = dir;
-            DataFilter = filter;
             GetTableFiles();
         }
         public void CheckBoxChanged(FileIdentity fi , bool value)
@@ -46,15 +37,20 @@ namespace Presentation.Maui.DTO
                 if (x.FileIdentity.Equals(fi.Id))
                     x.IsChecked = value;
             });
-        
+        private List<TableSelectionDTO.TableRows> ReCheckFiles(List<TableSelectionDTO.TableRows> rows)
+        {
+            List<FileIdentity> checkedFiles = this.Rows.Where(x => x.IsChecked)
+                    .Select(s => s.FileIdentity).ToList();
+                
+            rows.ForEach(f => f.IsChecked = checkedFiles.Any(x => x.Id.Equals(f.FileIdentity.Id) == false)
+                ? false
+                : true );
+
+            return rows;
+        }
         private void GetTableFiles()
         {
-            List<FileIdentity> checkedFiles = (this.Rows != null && this.Rows.Any())
-                ? this.Rows.Where(x => x.IsChecked)
-                    .Select(s => s.FileIdentity).ToList() 
-                    : new();
-
-            Rows = Dir.GetFiles()
+            var rows = Dir.GetFiles()
                 .Where(x => Predicate(x))
                 .Select(s => new TableSelectionDTO.TableRows()
                 {
@@ -64,10 +60,7 @@ namespace Presentation.Maui.DTO
                     IsChecked = true
                 }).ToList();
 
-            Rows.ForEach(f => f.IsChecked = checkedFiles.Any(x => x.Id.Equals(f.FileIdentity.Id) == false)
-                ? false
-                : true
-            );
+            Rows = ReCheckFiles(rows); 
         }
 
         private bool Predicate(FileInfo dto)

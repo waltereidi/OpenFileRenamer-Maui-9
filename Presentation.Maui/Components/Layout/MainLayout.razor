@@ -29,19 +29,13 @@
 @code {
     public async void ChooseDirectory_Click()
     {
-        var result = await FolderPicker.Default.PickAsync();
-        if (result.IsSuccessful)
-        {
-            DirectoryManagerService.SetDirectory(result.Folder.Path);
+        await DirectoryManagerService.SetDirectory();
             
-            Navigation.NavigateTo(
-                DirectoryManagerService.IsValid() 
-                    ? "/DataSelection"
-                    : "/"
-            );
-        }
-
-
+        Navigation.NavigateTo(
+            DirectoryManagerService.IsValid() 
+                ? "/DataSelection"
+                : "/"
+        );
     }
 
 }

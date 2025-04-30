@@ -1,3 +1,4 @@
+@using FileManager.DAO
 @using Presentation.Maui.DTO
 @using Presentation.Maui.Interfaces
 @using static Presentation.Maui.DTO.TableSelectionDTO
@@ -10,24 +11,28 @@
             <th>Name</th><th>Size</th><th></th>
         </tr>
     </thead>
-    @if (DataTableFiles!= null && DataTableFiles.Rows.Any())
+    @foreach (TableRows file in DataTableFiles.GetRows())
     {
-        @foreach (TableRows file in DataTableFiles.Rows)
-        {
-            <tr >
-                <td class="table-light">@file.FileName</td>
-                <td class="table-light">@file.FileSize</td>
+        <tr >
+            <td class="table-light">@file.FileName</td>
+            <td class="table-light">@file.FileSize</td>
             
-                <td class="table-light">
-                    <input id="@file.FileIdentity.Id" 
-                        type="checkbox" 
-                        checked="@file.IsChecked"
-                           @onchange="(e)=>CheckBoxChanged(e , file.FileIdentity)" />
-                </td>
-            </tr>
-        }    
-    }
+            <td class="table-light">
+                <input id="@file.FileIdentity.Id" 
+                    type="checkbox" 
+                    checked="@file.IsChecked"
+                        @onchange="(e)=>CheckBoxChanged(e , file.FileIdentity)" />
+            </td>
+        </tr>
+    }    
     
     
 
 </table>
+@code{
+    [Parameter]
+    public ITableSelection DataTableFiles { get; set; }
+
+    private void CheckBoxChanged(ChangeEventArgs e, FileIdentity fi)
+        => DataTableFiles.CheckBoxChanged(fi, (bool)e.Value);
+}

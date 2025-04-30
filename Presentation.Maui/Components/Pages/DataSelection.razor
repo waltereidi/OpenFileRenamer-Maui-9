@@ -2,6 +2,7 @@
 @inject NavigationManager Navigation
 @using Presentation.Maui.Components.Shared
 @using Presentation.Maui.DTO
+@using Presentation.Maui.Interfaces
 @using Presentation.Maui.Service
 @using Presentation.Maui.ValueObjects
 @page "/DataSelection"
@@ -16,19 +17,16 @@
 </button>
 
 @code{
-    private TableSelectionDTO TableSelection { get; set; }
+    private ITableSelection TableSelection { get; set; }
         = new TableSelectionDTO(DirectoryManagerService._dir, null );
-
-
 
     private void DataFilterChanged(DataFilterDTO e)
     { 
         TableSelection.SetDataFilter(e);
-        TableSelection.SetDir(DirectoryManagerService._dir);
     }
 
     private void PreviewSelectedFiles(MouseEventArgs args)
     {
-        var e = TableSelection.Rows.Where(x => x.IsChecked);
+        var e = TableSelection.GetCheckedRows();
     }
 }
