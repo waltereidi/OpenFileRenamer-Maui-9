@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Maui.Storage;
-using Presentation.Maui.DTO;
 
 namespace Presentation.Maui.Service
 {
     internal static class DirectoryManagerService
     {
         public static DirectoryInfo _dir { get; private set ; }
-        public static TablePreviewDTO _files { get; private set; }
 
         public static async Task SetDirectory()
         {

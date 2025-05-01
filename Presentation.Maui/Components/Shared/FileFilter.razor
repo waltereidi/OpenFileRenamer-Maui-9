@@ -1,6 +1,7 @@
 ﻿@namespace Presentation.Maui.Components.Shared
+@using ApplicationService.DAO
+@using ApplicationService.Interfaces
 @using Presentation.Maui.Components.Shared.Inputs
-@using Presentation.Maui.DTO
 
 <div>
 @* filter input  *@
@@ -32,7 +33,7 @@
 @code {
 
     [Parameter]
-    public EventCallback<DataFilterDTO> OnChangeCallBack { get; set; }
+    public EventCallback<IDataFilter> OnChangeCallBack { get; set; }
     private string FilterOption { get; set; }
     private string FilterText { get; set; }
     private void FilterTextChanged(ChangeEventArgs e)
@@ -47,7 +48,8 @@
     }
 
     private void FormChanged()
-        => OnChangeCallBack.InvokeAsync(new(FilterText, FilterOption));
-
-
+    {
+        IDataFilter e = new DataFilterDAO(FilterText, FilterOption);
+        OnChangeCallBack.InvokeAsync(); 
+    }
 }

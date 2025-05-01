@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Presentation.Maui.DTO;
 
 namespace Presentation.Maui.Components.Shared
 {

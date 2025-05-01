@@ -1,10 +1,9 @@
 ﻿@namespace Presentation.Maui.Components.Pages
 @inject NavigationManager Navigation
+@using ApplicationService.DAO
+@using ApplicationService.Interfaces
 @using Presentation.Maui.Components.Shared
-@using Presentation.Maui.DTO
-@using Presentation.Maui.Interfaces
 @using Presentation.Maui.Service
-@using Presentation.Maui.ValueObjects
 @page "/DataSelection"
 
 <FileFilter OnChangeCallBack="DataFilterChanged" />
@@ -18,9 +17,9 @@
 
 @code{
     private ITableSelection TableSelection { get; set; }
-        = new TableSelectionDTO(DirectoryManagerService._dir, null );
+        = new TableSelectionDAO(DirectoryManagerService._dir, null );
 
-    private void DataFilterChanged(DataFilterDTO e)
+    private void DataFilterChanged(IDataFilter e)
     { 
         TableSelection.SetDataFilter(e);
     }

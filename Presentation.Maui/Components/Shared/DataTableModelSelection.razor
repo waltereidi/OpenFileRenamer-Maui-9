@@ -1,7 +1,7 @@
+@using ApplicationService.DAO
+@using ApplicationService.Interfaces
 @using FileManager.DAO
-@using Presentation.Maui.DTO
-@using Presentation.Maui.Interfaces
-@using static Presentation.Maui.DTO.TableSelectionDTO
+
 @inject NavigationManager Navigation
 
 
@@ -11,7 +11,7 @@
             <th>Name</th><th>Size</th><th></th>
         </tr>
     </thead>
-    @foreach (TableRows file in DataTableFiles.GetRows())
+    @foreach (TableSelectionDAO.TableRows file in DataTableFiles.GetRows())
     {
         <tr >
             <td class="table-light">@file.FileName</td>
