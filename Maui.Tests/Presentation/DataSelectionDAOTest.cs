@@ -30,5 +30,14 @@ namespace Maui.Tests.Presentation
 
             Assert.IsTrue( Dao.GetRows().Count(x=>x.IsChecked == false) == 1 );
         }
+        [TestMethod]
+        public void UncheckFileAndFilterRecordsCheckState()
+        {
+            var result = Dao.GetRows();
+            var file = result.First(x => x.IsChecked);
+            Dao.CheckBoxChanged(file.FileIdentity, false);
+            Dao.SetDataFilter(new DataFilterDAO("t", "Contains"));
+            Assert.IsFalse(Dao.GetRows().First().IsChecked);
+        }
     }
 }

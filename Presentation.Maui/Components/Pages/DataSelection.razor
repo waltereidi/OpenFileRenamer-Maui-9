@@ -26,6 +26,11 @@
 
     private void PreviewSelectedFiles(MouseEventArgs args)
     {
-        var e = TableSelection.GetCheckedRows();
+        var lfi = TableSelection.GetCheckedRows().Select(s => s.FileIdentity);
+        if (lfi.Any())
+        {
+            FilePreviewManagerService.SetFilePreviewList(lfi);
+            Navigation.NavigateTo("/DataPreview");
+        }
     }
 }

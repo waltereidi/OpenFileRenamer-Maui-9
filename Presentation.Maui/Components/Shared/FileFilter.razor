@@ -50,6 +50,6 @@
     private void FormChanged()
     {
         IDataFilter e = new DataFilterDAO(FilterText, FilterOption);
-        OnChangeCallBack.InvokeAsync(); 
+        OnChangeCallBack.InvokeAsync(e); 
     }
 }
