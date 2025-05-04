@@ -1,5 +1,7 @@
 ﻿@namespace Presentation.Maui.Components.PreviewOptions
+@using ApplicationService.Contracts
 @using ApplicationService.Interfaces
+@using Presentation.Maui.Service
 
 <div class="border rounded">
 
@@ -37,7 +39,17 @@
     </div>
 
     <div class="form-group">
-        <label for="inputAddress">position</label>
+        <label for="inputAddress">Position</label>
+        <input 
+            type="number" 
+            class="form-control" 
+            placeholder="Text to append"
+            @bind="Position"
+            disabled="@IsNumberInputEnabled">
+    </div>
+
+    <div class="form-group">
+        <label for="inputAddress">Text to append</label>
         <input 
             type="text" 
             class="form-control" 
@@ -49,20 +61,34 @@
 
 @code {
     [Parameter]
-    public EventCallback<IOperationContract> PreviewChangedCallBack { get; set; }
-    
+    public EventCallback<IOperationContract> AppendPreviewChangedCallBack { get; set; }
+    private int Position { get; set; }
+
     private int CheckedValue { get; set; } = 0;
-    
+
+    private bool IsNumberInputEnabled { get => CheckedValue == 0; }
+
     private string TextValue { get; set; }
-    
+
     private void CheckedValueChanged(ChangeEventArgs e, int value)
         => CheckedValue = Boolean.Parse( e.Value.ToString()) 
             ? value 
             : CheckedValue;
 
     private void FormChanged()
-    {   
+    {
+        AppendPreviewChangedCallBack.InvokeAsync();
 
-        PreviewChangedCallBack.InvokeAsync();
     }
+    private IOperationContract GetOperationContract()
+    {
+        switch(CheckedValue)
+        {
+            case 0 : return new AppendAt(Position , TextValue , FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
+            case 1 : return new AppendToEnd(TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
+            case 2 : return new AppendToStart(TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
+            default: throw new Exception();
+        }
+    }
+
 }

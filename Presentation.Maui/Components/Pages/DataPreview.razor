@@ -1,11 +1,12 @@
 ﻿@namespace Presentation.Maui.Components.Pages
 
 @page "/DataPreview"
+@using ApplicationService.Interfaces
 @using Presentation.Maui.Components.PreviewOptions
 
 <div class="form-group">
     <label >Rename Preview</label>
-    <select class="form-control" @onchange="PreviewOptionChanged">
+    <select class="form-control" @onchange="PreviewSelectionChanged">
         <option value="0">NumberedSequence</option>
         <option value="1">Append</option>
         <option value="2">Pattern</option>
@@ -14,7 +15,9 @@
 
 @switch(PreviewOption)
 {
-    case 0 : <NumberedSequencePreviewer></NumberedSequencePreviewer>;break;
+    case 0:
+        <NumberedSequencePreviewer AppendPreviewChangedCallBack=""></NumberedSequencePreviewer>
+        ; break;
     case 1 : <AppendPreviewer></AppendPreviewer>; break;
     case 2 : <PatternPreviewer></PatternPreviewer>; break;
 }
@@ -24,6 +27,10 @@
 @code {
 
     private int PreviewOption { get; set; }
-    private void PreviewOptionChanged(ChangeEventArgs e)
+    private void PreviewSelectionChanged(ChangeEventArgs e)
         =>PreviewOption = int.Parse(e.Value.ToString());
+    private void PreviewFormChanged(IOperationContract contract )
+    {
+        
+    }
 }
