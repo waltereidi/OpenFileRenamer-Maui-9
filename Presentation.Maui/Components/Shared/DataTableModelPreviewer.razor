@@ -32,5 +32,6 @@
     public ITableSelection DataTableFiles { get; set; }
 
     private void CheckBoxChanged(ChangeEventArgs e, FileIdentity fi)
-        => DataTableFiles.CheckBoxChanged(fi, (bool)e.Value);
+        => DataTableFiles.CheckBoxChanged(fi, (bool)e.Value );
+
 }

@@ -1,6 +1,76 @@
 ﻿@namespace Presentation.Maui.Components.PreviewOptions
-<h3>NumberedSequencePreview</h3>
+@using ApplicationService.Contracts
+@using ApplicationService.Interfaces
+@using Presentation.Maui.Service
+
+<div class="border rounded p-3">
+    
+    <div class="form-check">
+        <input class="form-check-input"
+               type="radio"
+               name="radioNumberedSequence"
+               @onchange="(e) => CheckedValueChanged(e, 0)"
+               checked="true">
+        <label class="form-check-label" for="AppendToStart">
+            Sequence at start
+        </label>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input"
+               type="radio"
+               name="radioNumberedSequence"
+               @onchange="(e) => CheckedValueChanged(e, 1)">
+        <label class="form-check-label" for="AppendToStart">
+            Sequence at end
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label for="inputAddress">Separator</label>
+        <input type="text"
+               class="form-control"
+               placeholder="Separator"
+               @onchange="TextValueChanged">
+    </div>
+</div>
 
 @code {
+    
+    [Parameter]
+    public EventCallback<IOperationContract> CallBack { get; set; }
+
+    private int CheckedValue { get; set; } = 0;
+    private string TextValue { get; set; }
+    private void CheckedValueChanged(ChangeEventArgs e , int value )
+    {
+        CheckedValue = e.Value.Equals("on")
+            ? value
+            : CheckedValue;
+
+        FormChanged(); 
+    }
+    
+    private void TextValueChanged(ChangeEventArgs e)
+    {
+        TextValue = e.Value.ToString();
+        FormChanged();
+    }
+
+    private void FormChanged()
+    {
+        var oc = GetOperationContract();
+        CallBack.InvokeAsync(oc);
+    }
+
+    private IOperationContract GetOperationContract()
+    {
+        switch (CheckedValue)
+        {
+            case 0: return new NumberedSequenceBefore( TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
+            case 1: return new NumberedSequenceAfter(TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
+            default: throw new InvalidOperationException(nameof(CheckedValue));
+        }
+    }
 
 }

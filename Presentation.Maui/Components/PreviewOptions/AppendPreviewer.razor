@@ -3,13 +3,13 @@
 @using ApplicationService.Interfaces
 @using Presentation.Maui.Service
 
-<div class="border rounded">
+<div class="border rounded p-3">
 
     <div class="form-check">
       <input 
           class="form-check-input" 
           type="radio" 
-          name="AppendAt" 
+          name="radioAppend" 
           @onchange="(e)=>CheckedValueChanged(e,0)"
           checked>
       <label class="form-check-label" for="AppendAt">
@@ -19,9 +19,9 @@
     <div class="form-check">
       <input 
           class="form-check-input" 
-          type="radio" 
-          name="AppendToEnd"
-          @onchange="(e) => CheckedValueChanged(e, 0)">
+          type="radio"
+               name="radioAppend"
+          @onchange="(e) => CheckedValueChanged(e, 1)">
       <label class="form-check-label" for="AppendToEnd">
         Append to end
       </label>
@@ -30,9 +30,9 @@
     <div class="form-check">
       <input 
             class="form-check-input" 
-            type="radio" 
-            name="AppendToStart"
-            @onchange="(e) => CheckedValueChanged(e, 0)">
+            type="radio"
+            name="radioAppend"
+            @onchange="(e) => CheckedValueChanged(e, 2)">
       <label class="form-check-label" for="AppendToStart">
         Append to start
       </label>
@@ -43,8 +43,8 @@
         <input 
             type="number" 
             class="form-control" 
-            placeholder="Text to append"
-            @bind="Position"
+            placeholder="Position"
+            @onchange="PositionHasChanged"
             disabled="@IsNumberInputEnabled">
     </div>
 
@@ -54,32 +54,47 @@
             type="text" 
             class="form-control" 
             placeholder="Text to append"
-            @bind="TextValue">
+            @onchange="TextValueChanged">
     </div>
 </div>
 
 
 @code {
     [Parameter]
-    public EventCallback<IOperationContract> AppendPreviewChangedCallBack { get; set; }
+    public EventCallback<IOperationContract> CallBack { get; set; }
     private int Position { get; set; }
 
     private int CheckedValue { get; set; } = 0;
 
-    private bool IsNumberInputEnabled { get => CheckedValue == 0; }
+    private bool IsNumberInputEnabled { get => CheckedValue != 0; }
 
     private string TextValue { get; set; }
+    private void PositionHasChanged(ChangeEventArgs e)
+    {
+        Position = int.Parse(e.Value.ToString());
+        FormChanged();
+    }
+
+    private void TextValueChanged(ChangeEventArgs e )
+    {
+        TextValue = e.Value.ToString();
+        FormChanged();
+    }
 
     private void CheckedValueChanged(ChangeEventArgs e, int value)
-        => CheckedValue = Boolean.Parse( e.Value.ToString()) 
-            ? value 
+    {
+        CheckedValue = e.Value.Equals("on")
+            ? value
             : CheckedValue;
+        FormChanged();
+    }
 
     private void FormChanged()
     {
-        AppendPreviewChangedCallBack.InvokeAsync();
-
+        var oc = GetOperationContract();
+        CallBack.InvokeAsync(oc);
     }
+
     private IOperationContract GetOperationContract()
     {
         switch(CheckedValue)
@@ -87,7 +102,7 @@
             case 0 : return new AppendAt(Position , TextValue , FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
             case 1 : return new AppendToEnd(TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
             case 2 : return new AppendToStart(TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
-            default: throw new Exception();
+            default: throw new InvalidOperationException(nameof(CheckedValue));
         }
     }
 

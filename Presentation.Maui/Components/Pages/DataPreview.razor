@@ -4,7 +4,7 @@
 @using ApplicationService.Interfaces
 @using Presentation.Maui.Components.PreviewOptions
 
-<div class="form-group">
+<div class="form-group my-3">
     <label >Rename Preview</label>
     <select class="form-control" @onchange="PreviewSelectionChanged">
         <option value="0">NumberedSequence</option>
@@ -13,14 +13,18 @@
     </select>
 </div>
 
+<div class="my-3">
 @switch(PreviewOption)
 {
     case 0:
-        <NumberedSequencePreviewer AppendPreviewChangedCallBack=""></NumberedSequencePreviewer>
+            <NumberedSequencePreviewer CallBack="PreviewFormChanged"></NumberedSequencePreviewer>
         ; break;
-    case 1 : <AppendPreviewer></AppendPreviewer>; break;
+    case 1:
+            <AppendPreviewer CallBack="PreviewFormChanged"></AppendPreviewer>
+        ; break;
     case 2 : <PatternPreviewer></PatternPreviewer>; break;
 }
+</div>
 
 
 
@@ -29,8 +33,9 @@
     private int PreviewOption { get; set; }
     private void PreviewSelectionChanged(ChangeEventArgs e)
         =>PreviewOption = int.Parse(e.Value.ToString());
+    private IOperationContract OperationContract { get; set; }
     private void PreviewFormChanged(IOperationContract contract )
     {
-        
+        OperationContract = contract;
     }
 }
