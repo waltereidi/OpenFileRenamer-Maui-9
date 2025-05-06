@@ -1,8 +1,11 @@
 ﻿@namespace Presentation.Maui.Components.Pages
 
 @page "/DataPreview"
+@using ApplicationService.DAO
 @using ApplicationService.Interfaces
 @using Presentation.Maui.Components.PreviewOptions
+@using Presentation.Maui.Components.Shared
+@using Presentation.Maui.Service
 
 <div class="form-group my-3">
     <label >Rename Preview</label>
@@ -22,20 +25,29 @@
     case 1:
             <AppendPreviewer CallBack="PreviewFormChanged"></AppendPreviewer>
         ; break;
-    case 2 : <PatternPreviewer></PatternPreviewer>; break;
+        case 2:
+            <PatternPreviewer CallBack="PreviewFormChanged"></PatternPreviewer>
+        ; break;
 }
 </div>
 
-
+    <DataTableModelPreviewer DataTableFiles="TablePreview"></DataTableModelPreviewer>
 
 @code {
 
+
     private int PreviewOption { get; set; }
+
     private void PreviewSelectionChanged(ChangeEventArgs e)
-        =>PreviewOption = int.Parse(e.Value.ToString());
+        => PreviewOption = int.Parse(e.Value.ToString());
+
     private IOperationContract OperationContract { get; set; }
+
+    private ITablePreview TablePreview { get; set; }
+  
+    protected override void OnAfterRender(bool firstRender)
+        => TablePreview = new TablePreviewDAO(DirectoryManagerService._dir, OperationContract);
+
     private void PreviewFormChanged(IOperationContract contract )
-    {
-        OperationContract = contract;
-    }
+        => OperationContract = contract;
 }

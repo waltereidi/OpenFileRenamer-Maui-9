@@ -39,9 +39,12 @@
     
     [Parameter]
     public EventCallback<IOperationContract> CallBack { get; set; }
-
     private int CheckedValue { get; set; } = 0;
     private string TextValue { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    => FormChanged();
+
     private void CheckedValueChanged(ChangeEventArgs e , int value )
     {
         CheckedValue = e.Value.Equals("on")

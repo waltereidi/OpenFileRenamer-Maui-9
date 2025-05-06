@@ -3,35 +3,19 @@
 @using FileManager.DAO
 
 
-
-<table class="table table-dark table-striped">
+<table class="table table-primary table-striped">
     <thead class="thead-dark">
         <tr>
-            <th>Name</th><th>Size</th><th></th>
+            <th>Name</th>
         </tr>
     </thead>
-    @foreach (TableSelectionDAO.TableRows file in DataTableFiles.GetRows())
-    {
-        <tr >
-            <td class="table-light">@file.FileName</td>
-            <td class="table-light">@file.FileSize</td>
-            
-            <td class="table-light">
-                <input id="@file.FileIdentity.Id" 
-                    type="checkbox" 
-                    checked="@file.IsChecked"
-                        @onchange="(e)=>CheckBoxChanged(e , file.FileIdentity)" />
-            </td>
-        </tr>
-    }    
+    
        
 
 </table>
 @code{
     [Parameter]
-    public ITableSelection DataTableFiles { get; set; }
+    public ITablePreview DataTableFiles { get; set; }
 
-    private void CheckBoxChanged(ChangeEventArgs e, FileIdentity fi)
-        => DataTableFiles.CheckBoxChanged(fi, (bool)e.Value );
 
 }

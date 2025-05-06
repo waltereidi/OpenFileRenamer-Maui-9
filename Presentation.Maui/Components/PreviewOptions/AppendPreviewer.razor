@@ -68,6 +68,10 @@
 
     private bool IsNumberInputEnabled { get => CheckedValue != 0; }
 
+    protected override void OnAfterRender(bool firstRender)
+    => FormChanged();
+
+
     private string TextValue { get; set; }
     private void PositionHasChanged(ChangeEventArgs e)
     {
