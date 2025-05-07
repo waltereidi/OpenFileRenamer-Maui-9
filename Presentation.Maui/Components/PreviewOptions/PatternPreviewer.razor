@@ -93,7 +93,11 @@
         FormChanged();
     }
     protected override void OnAfterRender(bool firstRender)
-        => FormChanged();
+    {
+        if (firstRender)
+            FormChanged();
+    }
+
 
     private void FormChanged()
     {

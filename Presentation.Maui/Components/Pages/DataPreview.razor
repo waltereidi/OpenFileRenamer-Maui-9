@@ -41,13 +41,14 @@
     private void PreviewSelectionChanged(ChangeEventArgs e)
         => PreviewOption = int.Parse(e.Value.ToString());
 
-    private IOperationContract OperationContract { get; set; }
 
     private ITablePreview TablePreview { get; set; }
-  
-    protected override void OnAfterRender(bool firstRender)
-        => TablePreview = new TablePreviewDAO(DirectoryManagerService._dir, OperationContract);
+
+    protected override void OnInitialized()
+        => TablePreview = new TablePreviewDAO(DirectoryManagerService._dir);
 
     private void PreviewFormChanged(IOperationContract contract )
-        => OperationContract = contract;
+        => TablePreview.SetDataPreview(contract);
+
+    
 }

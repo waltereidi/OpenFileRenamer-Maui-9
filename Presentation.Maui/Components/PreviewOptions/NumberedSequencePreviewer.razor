@@ -43,7 +43,10 @@
     private string TextValue { get; set; }
 
     protected override void OnAfterRender(bool firstRender)
-    => FormChanged();
+    { 
+        if (firstRender)
+            FormChanged();
+    }
 
     private void CheckedValueChanged(ChangeEventArgs e , int value )
     {

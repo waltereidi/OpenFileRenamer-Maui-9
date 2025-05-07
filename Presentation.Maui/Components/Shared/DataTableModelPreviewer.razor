@@ -9,6 +9,14 @@
             <th>Name</th>
         </tr>
     </thead>
+    <tbody>
+        @foreach (TablePreviewDAO.TableRows row in DataTableFiles != null ? DataTableFiles.GetRows() : new())
+        {
+            <tr>
+                <th>@row.FileName</th>
+            </tr>
+        }
+    </tbody>
     
        
 
