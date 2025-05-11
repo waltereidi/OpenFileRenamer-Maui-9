@@ -34,13 +34,16 @@
 
     <DataTableModelPreviewer DataTableFiles="TablePreview"></DataTableModelPreviewer>
     
-    <button class="btn btn-sm btn-warning" @onclick="RenameFilesOperation">Rename Files</button>
+    <button class="btn btn-sm btn-warning w-100 my-3" @onclick="RenameFilesOperation">Rename Files</button>
 
-    <button class="btn btn-sm btn-danger d-none">Rollback</button>
+    <button 
+        class="btn btn-sm btn-danger w-100 my-3" 
+        disabled="@IsRollbackEnabled" 
+        @onclick="RollbackOperation">Rollback
+    </button>
 
 @code {
-
-
+    private bool IsRollbackEnabled { get; set; } = true;  
     private int PreviewOption { get; set; }
 
     private IOperationContract OperationContract { get; set; }
@@ -62,10 +65,17 @@
 
     private async Task RenameFilesOperation(MouseEventArgs args)
     {
-        
         var oc = OperationContract;
         OperationContract = null;
         var service = new MainApplicationService();
         service.RenameFiles(oc);
+        IsRollbackEnabled = false;
+    }
+    private void RollbackOperation(MouseEventArgs args)
+    {
+        var service = new MainApplicationService();
+        
+        var files = service.RollBackVersion(DirectoryManagerService._dir.FullName);
+        
     }
 }
