@@ -77,5 +77,8 @@
         
         var files = service.RollBackVersion(DirectoryManagerService._dir.FullName);
         
+        var refreshedFiles = service.RefreshFileList(DirectoryManagerService._dir.FullName);
+        
+        FilePreviewManagerService.SetFilePreviewList(refreshedFiles);
     }
 }

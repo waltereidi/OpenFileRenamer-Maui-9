@@ -1,4 +1,5 @@
 ﻿using ApplicationService;
+using FileManager;
 using FileManager.DAO;
 using FileManager.FileOperations;
 using System;
@@ -14,11 +15,7 @@ namespace Presentation.Maui.Service
         public static List<FileIdentity> FileIdentities { get; private set; }
         public static void SetFilePreviewList(IEnumerable<FileIdentity> lfi)
             => FileIdentities = lfi.ToList();
-        public static void RefreshFileList()
-        {
-            var service = new MainApplicationService(); 
-            service.RefreshFileList(FileIdentities);
-        }
+
 
     }
 }
