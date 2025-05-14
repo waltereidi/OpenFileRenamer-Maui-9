@@ -41,17 +41,6 @@
         <input class="form-check-input"
                type="radio"
                name="radioPattern"
-               @onchange="(e) => CheckedValueChanged(e, 3)"
-               checked="true">
-        <label class="form-check-label">
-            Word Pattern
-        </label>
-    </div>
-
-    <div class="form-check">
-        <input class="form-check-input"
-               type="radio"
-               name="radioPattern"
                @onchange="(e) => CheckedValueChanged(e, 4)">
         <label class="form-check-label">
             Regex Pattern
@@ -59,7 +48,7 @@
     </div>
 
     <div class="form-group">
-        <label for="inputAddress">Separator</label>
+        <label for="inputAddress">@LblText</label>
         <input type="text"
                class="form-control"
                placeholder="Separator"
@@ -67,7 +56,7 @@
     </div>
 
     <div class="form-group">
-        <label for="inputAddress">Separator</label>
+        <label for="inputAddress">@LblPattern</label>
         <input type="text"
                class="form-control"
                placeholder="Separator"
@@ -83,6 +72,29 @@
     private string TextValue { get; set; }
     private string Pattern { get; set; }
     private bool IsPatternEnabled { get => CheckedValue == 0 || CheckedValue == 4; }
+    private bool IsTextEnabled { get => CheckedValue == 0 || CheckedValue == 4; }
+    private string LblText { get => GetLblText(); }
+
+    private string LblPattern { get => GetLblPattern(); }
+    private string GetLblPattern()
+    =>  CheckedValue switch
+        {
+            0 => "Text to be replaced",
+            1 => "",
+            2 => "",
+            4 => "Regex Pattern",
+            _ => throw new InvalidOperationException(nameof(CheckedValue))
+        };
+    
+    private string GetLblText()
+    => CheckedValue switch
+    {
+        0 => "new text",
+        1 => "",
+        2 => "",
+        4 => "new Text",
+        _ => throw new InvalidOperationException(nameof(CheckedValue))
+    };
 
     private void CheckedValueChanged(ChangeEventArgs e, int value)
     {
@@ -114,7 +126,7 @@
         TextValue = e.Value.ToString();
         FormChanged();
     }
-    
+
     private IOperationContract GetOperationContract()
     {
         switch (CheckedValue)
@@ -122,7 +134,6 @@
             case 0: return new ReplacePattern(Pattern, TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
             case 1: return new ToLowerPattern(FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
             case 2: return new ToUpperPattern(FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
-            case 3: return new WordsPattern(TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
             case 4: return new RegexPattern( Pattern , TextValue, FilePreviewManagerService.FileIdentities, DirectoryManagerService._dir.FullName);
             default: throw new InvalidOperationException(nameof(CheckedValue));
         }

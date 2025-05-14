@@ -70,6 +70,11 @@
         var service = new MainApplicationService();
         service.RenameFiles(oc);
         IsRollbackEnabled = false;
+
+        // var refreshedFiles = service.RefreshFileList(DirectoryManagerService._dir.FullName, FilePreviewManagerService.FileIdentities);
+
+        // FilePreviewManagerService.SetFilePreviewList(refreshedFiles);
+
     }
     private void RollbackOperation(MouseEventArgs args)
     {
@@ -77,8 +82,8 @@
         
         var files = service.RollBackVersion(DirectoryManagerService._dir.FullName);
         
-        var refreshedFiles = service.RefreshFileList(DirectoryManagerService._dir.FullName);
+        // var refreshedFiles = service.RefreshFileList(DirectoryManagerService._dir.FullName , FilePreviewManagerService.FileIdentities);
         
-        FilePreviewManagerService.SetFilePreviewList(refreshedFiles);
+        // FilePreviewManagerService.SetFilePreviewList(refreshedFiles);
     }
 }
