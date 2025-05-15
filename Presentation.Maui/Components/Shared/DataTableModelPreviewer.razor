@@ -3,17 +3,17 @@
 @using FileManager.DAO
 
 
-<table class="table table-primary table-striped">
-    <thead class="thead-dark">
+<table class="table table-primary table-striped w-100">
+    <thead class="">
         <tr>
-            <th>Name</th>
+            <th >Name</th>
         </tr>
     </thead>
     <tbody>
         @foreach (TablePreviewDAO.TableRows row in DataTableFiles != null ? DataTableFiles.GetRows() : new())
         {
             <tr>
-                <th>@row.FileName</th>
+                <th class="table-division">@row.FileName</th>
             </tr>
         }
     </tbody>
