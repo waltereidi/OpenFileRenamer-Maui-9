@@ -1,6 +1,7 @@
 @using ApplicationService.DAO
 @using ApplicationService.Interfaces
 @using FileManager.DAO
+@using static Presentation.Maui.Components.Shared.Pagination
 
 @inject NavigationManager Navigation
 
@@ -11,7 +12,10 @@
             <th>Name</th><th>Size</th><th></th>
         </tr>
     </thead>
-    @foreach (TableSelectionDAO.TableRows file in DataTableFiles.GetRows())
+    @foreach (TableSelectionDAO.TableRows file in Pagination == null 
+            ? DataTableFiles.GetRows() 
+            : DataTableFiles.GetRows().Skip(Pagination.skip).Take(Pagination.take)
+    )
     {
         <tr>
             <td class="table-light table-division">
@@ -28,11 +32,16 @@
             </td>
         </tr>
     }    
-
+    
 </table>
+<Pagination OnPageChangedCallBack="PageChangedCallBack" ItemCount="@DataTableFiles.GetRows().Count()"></Pagination>
 @code{
     [Parameter]
     public ITableSelection DataTableFiles { get; set; }
+    public PaginationDTO Pagination { get; set; }
+
+    private void PageChangedCallBack(PaginationDTO dto)
+        => Pagination = dto;
 
     private void CheckBoxChanged(ChangeEventArgs e, FileIdentity fi)
         => DataTableFiles.CheckBoxChanged(fi, (bool)e.Value);

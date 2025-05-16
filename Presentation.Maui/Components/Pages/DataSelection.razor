@@ -19,6 +19,7 @@
     private ITableSelection TableSelection { get; set; }
         = new TableSelectionDAO(DirectoryManagerService._dir, null );
 
+
     private void DataFilterChanged(IDataFilter e)
     { 
         TableSelection.SetDataFilter(e);
