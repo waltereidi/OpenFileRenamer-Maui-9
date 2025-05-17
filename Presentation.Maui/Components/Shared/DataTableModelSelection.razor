@@ -12,10 +12,7 @@
             <th>Name</th><th>Size</th><th></th>
         </tr>
     </thead>
-    @foreach (TableSelectionDAO.TableRows file in Pagination == null 
-            ? DataTableFiles.GetRows() 
-            : DataTableFiles.GetRows().Skip(Pagination.skip).Take(Pagination.take)
-    )
+    @foreach (TableSelectionDAO.TableRows file in GetRows() )
     {
         <tr>
             <td class="table-light table-division">
@@ -34,11 +31,27 @@
     }    
     
 </table>
-<Pagination OnPageChangedCallBack="PageChangedCallBack" ItemCount="@DataTableFiles.GetRows().Count()"></Pagination>
+<Pagination OnPageChangedCallBack="PageChangedCallBack" 
+    ItemCount="@DataTableFiles.GetRows().Count()"
+    PageSize="10"
+></Pagination>
 @code{
     [Parameter]
     public ITableSelection DataTableFiles { get; set; }
     public PaginationDTO Pagination { get; set; }
+    private List<TableSelectionDAO.TableRows> GetRows()
+    {
+        if (Pagination == null)
+        {
+            return DataTableFiles.GetRows();
+        }
+        else
+        {
+            var result = DataTableFiles.GetRows().Skip(Pagination.skip).Take(Pagination.take).ToList();
+            return result;
+        }
+        
+    }
 
     private void PageChangedCallBack(PaginationDTO dto)
         => Pagination = dto;

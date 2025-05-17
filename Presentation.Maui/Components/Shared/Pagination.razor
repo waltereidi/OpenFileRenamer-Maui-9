@@ -4,44 +4,80 @@
     
     <ul class="pagination">
 
-        <li class="page-item @(CurrentPage == 1 ?"disabled" : "")">
+        <li class="page-item @( IsPrevEnabled() ?"disabled" : "")">
             <a class="page-link" href="#" tabindex="-1">Previous</a>
         </li>
-            @for(int i= 0; i < ItemCount/PageSize; i++)
+            @* @for(int i= 0; i < (ItemCount/PageSize)+1; i++)
             {
                 <li class="page-item">
-                    <a class="page-link @(CurrentPage == i+1 ? "active" : "")" 
+                    <a class="page-link @(CurrentPage == (i+1)? "active" : "")" 
                         href="#"
-                        @onclick="(e)=>OnPageClick(e, i+1)"
-                    >i+1</a>
+                        @onclick="(e)=>OnPageClick(e,i)"
+                    >@(i+1)</a>
+                </li>
+            } *@
+            @foreach (var row in GetListPagination())
+            {
+                <li class="page-item">
+                    <a class="page-link @( IsCurrentPage(row.Item1) ? "active" : "")"
+                       href="#"
+                       @onclick="(e) => OnPageClickEvent(e, row.Item1)">@row.Item2</a>
                 </li>
             }
 
-        <li class="page-item @(CurrentPage == (PageSize/ItemCount) ? "disabled" : "" )">
+        <li class="page-item @(IsNextEnabled() ? "disabled" : "" )">
             <a class="page-link" href="#">Next</a>
         </li>
+
     </ul>
 </nav>    
 }
 
 @code {
     public record PaginationDTO(int page , int skip, int take);
+
     [Parameter] 
     public int ItemCount { get; set; }
 
     [Parameter] 
     public EventCallback<PaginationDTO> OnPageChangedCallBack { get; set; }
 
-    private void OnPageClick(MouseEventArgs eventArgs, int page)
+    private bool IsCurrentPage(int i)
+        => CurrentPage == i;
+
+    private bool IsPrevEnabled()
+        => CurrentPage == 1;
+
+    private bool IsNextEnabled()
+        => CurrentPage >= (ItemCount / PageSize) + 1;
+
+    private List<Tuple<int , string>> GetListPagination()
     {
-        if(page != CurrentPage )
+        List<Tuple<int, string>> result = new();
+        for(int i = 0; i< (ItemCount/PageSize)+1; i++)
+        {
+            result.Add(new(i + 1, (i + 1).ToString()) );
+        }
+        return result;
+    }
+    protected override Task OnInitializedAsync()
+    {
+        OnPageClick(1);
+        return base.OnInitializedAsync();
+    }
+    private void OnPageClick(int page)
+    {
+        if (page != CurrentPage)
         {
             CurrentPage = page;
-            OnPageChangedCallBack.InvokeAsync(new (page , page*PageSize, PageSize));
+            OnPageChangedCallBack.InvokeAsync(new(page, (page * PageSize) - PageSize, PageSize));
         }
     }
+    private void OnPageClickEvent(MouseEventArgs eventArgs, int page)
+      => OnPageClick(page);
 
-    private int PageSize = 10;
+    [Parameter]
+    public int PageSize { get; set; }
 
     private int CurrentPage { get; set; }
     
