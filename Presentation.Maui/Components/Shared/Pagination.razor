@@ -5,28 +5,21 @@
     <ul class="pagination">
 
         <li class="page-item @( IsPrevEnabled() ?"disabled" : "")">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
+            <a class="page-link" 
+            tabindex="-1"
+                   @onclick="OnPagePrevClickEvent">Previous</a>
         </li>
-            @* @for(int i= 0; i < (ItemCount/PageSize)+1; i++)
-            {
-                <li class="page-item">
-                    <a class="page-link @(CurrentPage == (i+1)? "active" : "")" 
-                        href="#"
-                        @onclick="(e)=>OnPageClick(e,i)"
-                    >@(i+1)</a>
-                </li>
-            } *@
+
             @foreach (var row in GetListPagination())
             {
                 <li class="page-item">
                     <a class="page-link @( IsCurrentPage(row.Item1) ? "active" : "")"
-                       href="#"
                        @onclick="(e) => OnPageClickEvent(e, row.Item1)">@row.Item2</a>
                 </li>
             }
 
         <li class="page-item @(IsNextEnabled() ? "disabled" : "" )">
-            <a class="page-link" href="#">Next</a>
+                <a class="page-link" @onclick="OnPageNextClickEvent">Next</a>
         </li>
 
     </ul>
@@ -35,12 +28,15 @@
 
 @code {
     public record PaginationDTO(int page , int skip, int take);
-
-    [Parameter] 
-    public int ItemCount { get; set; }
+    
+    [Parameter] public int ItemCount { get; set; }
 
     [Parameter] 
     public EventCallback<PaginationDTO> OnPageChangedCallBack { get; set; }
+    
+    [Parameter] public int PageSize { get; set; }
+
+    private int CurrentPage { get; set; }
 
     private bool IsCurrentPage(int i)
         => CurrentPage == i;
@@ -60,11 +56,13 @@
         }
         return result;
     }
+
     protected override Task OnInitializedAsync()
     {
         OnPageClick(1);
         return base.OnInitializedAsync();
     }
+
     private void OnPageClick(int page)
     {
         if (page != CurrentPage)
@@ -73,16 +71,20 @@
             OnPageChangedCallBack.InvokeAsync(new(page, (page * PageSize) - PageSize, PageSize));
         }
     }
+
     private void OnPageClickEvent(MouseEventArgs eventArgs, int page)
-      => OnPageClick(page);
+        => OnPageClick(page);
 
-    [Parameter]
-    public int PageSize { get; set; }
+    private void OnPageNextClickEvent(MouseEventArgs eventArgs)
+        => OnPageClick(CurrentPage+1);
 
-    private int CurrentPage { get; set; }
+    private void OnPagePrevClickEvent(MouseEventArgs eventArgs)
+        => OnPageClick(CurrentPage - 1);
     
-    protected override void OnParametersSet()
+
+    protected override void OnInitialized()
     {
-        CurrentPage = 1; 
+        CurrentPage = 1;
+        OnPageChangedCallBack.InvokeAsync(new(1, (1 * PageSize) - PageSize, PageSize));
     }
 }

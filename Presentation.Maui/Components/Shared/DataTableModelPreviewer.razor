@@ -1,7 +1,7 @@
 @using ApplicationService.DAO
 @using ApplicationService.Interfaces
 @using FileManager.DAO
-
+@using static Presentation.Maui.Components.Shared.Pagination
 
 <table class="table table-primary table-striped w-100">
     <thead class="">
@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (TablePreviewDAO.TableRows row in DataTableFiles != null ? DataTableFiles.GetRows() : new())
+        @foreach (TablePreviewDAO.TableRows row in GetRows())
         {
             <tr>
                 <th class="table-division">@row.FileName</th>
@@ -19,9 +19,22 @@
     </tbody>
     
 </table>
+<Pagination OnPageChangedCallBack="PageChangedCallBack"
+            ItemCount="@DataTableFiles.GetRows().Count()"
+            PageSize="10"></Pagination>
 @code{
-    [Parameter]
-    public ITablePreview DataTableFiles { get; set; }
+    
+    [Parameter] public ITablePreview DataTableFiles { get; set; }
+
+    public PaginationDTO Pagination { get; set; }
+
+    private void PageChangedCallBack(PaginationDTO dto)
+    => Pagination = dto;
+
+    private List<TablePreviewDAO.TableRows> GetRows()
+        => Pagination == null 
+            ? DataTableFiles.GetRows()
+            : DataTableFiles.GetRows().Skip(Pagination.skip).Take(Pagination.take).ToList();
 
 
 }

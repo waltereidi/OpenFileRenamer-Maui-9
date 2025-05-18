@@ -38,20 +38,13 @@
 @code{
     [Parameter]
     public ITableSelection DataTableFiles { get; set; }
+
     public PaginationDTO Pagination { get; set; }
+
     private List<TableSelectionDAO.TableRows> GetRows()
-    {
-        if (Pagination == null)
-        {
-            return DataTableFiles.GetRows();
-        }
-        else
-        {
-            var result = DataTableFiles.GetRows().Skip(Pagination.skip).Take(Pagination.take).ToList();
-            return result;
-        }
-        
-    }
+         => Pagination == null
+            ? DataTableFiles.GetRows()
+            : DataTableFiles.GetRows().Skip(Pagination.skip).Take(Pagination.take).ToList();
 
     private void PageChangedCallBack(PaginationDTO dto)
         => Pagination = dto;
