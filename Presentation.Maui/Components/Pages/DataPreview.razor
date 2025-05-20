@@ -4,9 +4,11 @@
 @using ApplicationService
 @using ApplicationService.DAO
 @using ApplicationService.Interfaces
+@using BlazorBootstrap
 @using Presentation.Maui.Components.PreviewOptions
 @using Presentation.Maui.Components.Shared
 @using Presentation.Maui.Service
+@inherits LayoutComponentBase
 
 <div class="form-group my-3">
     <label >Rename Preview</label>
@@ -31,9 +33,10 @@
         ; break;
 }
 </div>
-
     <DataTableModelPreviewer DataTableFiles="TablePreview"></DataTableModelPreviewer>
-    
+
+    <BlazorBootstrap.Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
     <button class="btn btn-sm btn-warning w-100 my-3" @onclick="RenameFilesOperation">Rename Files</button>
 
     <button 
@@ -45,6 +48,8 @@
 @code {
     private bool IsRollbackEnabled { get; set; } = true;  
     private int PreviewOption { get; set; }
+
+    [Inject] protected ToastService ToastService { get; set; } = default!;
 
     private IOperationContract OperationContract { get; set; }
 
@@ -65,16 +70,37 @@
 
     private async Task RenameFilesOperation(MouseEventArgs args)
     {
-        var oc = OperationContract;
-        OperationContract = null;
+        try
+        {
+            var oc = OperationContract;
+            OperationContract = null;
 
-        var service = new MainApplicationService();
-        service.RenameFiles(oc);
+            var service = new MainApplicationService();
+            await service.RenameFiles(oc);
 
-        IsRollbackEnabled = false;
+            IsRollbackEnabled = false;
+
+            ToastService.Notify(new(ToastType.Success, $"Files rename was successfull."));
+        }catch(Exception ex)
+        {
+            ToastService.Notify(new(ToastType.Danger, $"File rename Error: {ex.Message}."));
+
+        }
+
 
     }
-    private void RollbackOperation(MouseEventArgs args)
-        => new MainApplicationService()
-        .RollBackVersion(DirectoryManagerService._dir.FullName);
+    private async void RollbackOperation(MouseEventArgs args)
+    {
+        try{
+            var service = new MainApplicationService();
+            var result =await service.RollBackVersion(DirectoryManagerService._dir.FullName);
+            
+            ToastService.Notify(new(ToastType.Info, $"Rollback {result.message}"));
+        }
+        catch(Exception ex)
+        {
+            ToastService.Notify(new (ToastType.Danger, $"Rollback Error: {ex.Message}."));
+        }
+    }
+
 }
