@@ -42,12 +42,11 @@
     {
         await DirectoryManagerService.SetDirectory();
             
-        Navigation.NavigateTo(
-            DirectoryManagerService.IsValid() 
-                ? "/DataSelection"
-                // ? "/DataPreview"
-                : "/"
-        );
+        if (DirectoryManagerService.IsValid())
+            Navigation.NavigateTo( "/DataSelection" );
+        else 
+            Navigation.NavigateTo("/");
     }
+
 
 }
